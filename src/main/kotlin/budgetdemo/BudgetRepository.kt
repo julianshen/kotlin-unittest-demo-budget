@@ -1,5 +1,5 @@
 package budgetdemo
 
 interface BudgetRepository {
-    fun findAll():List<Budget>;
+    fun findAll():List<Budget>
 }
