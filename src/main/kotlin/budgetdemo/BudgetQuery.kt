@@ -1,8 +1,6 @@
 package budgetdemo
 
 import java.time.LocalDate
-import java.time.YearMonth
-import java.time.temporal.ChronoUnit
 
 class BudgetQuery(val budgetRepo: BudgetRepository) {
     fun query(from: LocalDate, to: LocalDate): Int {
@@ -10,19 +8,12 @@ class BudgetQuery(val budgetRepo: BudgetRepository) {
             throw InvalidDateException()
         }
 
-        val allBudgets = getAllBudgetsAsMap()
-        val numOfDays = ChronoUnit.DAYS.between(from, to)
-        return listOf(0..numOfDays).flatMap { it }.map {
-            YearMonth.from(from.plusDays(it))
-        }.groupingBy { it }.eachCount().map {
-            (allBudgets[it.key] ?: 0) * it.value / it.key.lengthOfMonth()
+        val queryDuration = Duration(from, to)
+        return budgetRepo.findAll().map {
+            it.getAmount(queryDuration)
         }.sum()
     }
-
-    private fun getAllBudgetsAsMap() = budgetRepo.findAll().map { it.yearMonth to it.amount }.toMap()
-
 }
 
 class InvalidDateException : Throwable() {
-
 }
