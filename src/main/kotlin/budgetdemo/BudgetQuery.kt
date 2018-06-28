@@ -16,9 +16,7 @@ class BudgetQuery(val budgetRepo: BudgetRepository) {
         return listOf(0..numOfDays).flatMap { it }.map { i ->
             YearMonth.from(from.plusDays(i))
         }.groupingBy { it }.eachCount().map {
-            var yearMonth = it.key
-            val lengthOfMonth = yearMonth.lengthOfMonth()
-            (allBudgets[yearMonth]?:0) * it.value / lengthOfMonth
+            (allBudgets[it.key]?:0) * it.value / it.key.lengthOfMonth()
         }.sum()
     }
 }
