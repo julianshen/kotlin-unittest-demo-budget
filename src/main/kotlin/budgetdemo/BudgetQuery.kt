@@ -15,5 +15,4 @@ class BudgetQuery(val budgetRepo: BudgetRepository) {
     }
 }
 
-class InvalidDateException : Throwable() {
-}
+class InvalidDateException : Throwable()
