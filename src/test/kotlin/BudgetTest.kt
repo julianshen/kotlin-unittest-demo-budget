@@ -12,7 +12,7 @@ class BudgetTest {
 
     @Test
     fun end_date_before_start_date() {
-        assertThatExceptionOfType(InvalidDateException::class.java).isThrownBy { budgetQuery.query(from = date(2018, 2, 1), to = date(2018, 2, 28)) }
+        assertThatExceptionOfType(InvalidDateException::class.java).isThrownBy { budgetQuery.query(from = date(2018, 2, 1), to = date(2018, 1, 28)) }
     }
 
     @Test

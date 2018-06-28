@@ -10,7 +10,7 @@ class BudgetQuery(val budgetRepo: BudgetRepository) {
             throw InvalidDateException()
         }
 
-        val allBudgets = budgetRepo.findAll()
+        val allBudgets = budgetRepo.findAll().map { YearMonth.of(it.year, it.month) to it.amount }.toMap()
         val numOfDays = ChronoUnit.DAYS.between(from, to)
 
         return listOf(0..numOfDays).flatMap { it }.map { i ->
@@ -18,7 +18,7 @@ class BudgetQuery(val budgetRepo: BudgetRepository) {
         }.groupingBy { it }.eachCount().map {
             var yearMonth = it.key
             val lengthOfMonth = yearMonth.lengthOfMonth()
-            allBudgets.find { it.year == yearMonth.year && it.month == yearMonth.month.value }?.amount
+            (allBudgets[yearMonth]?:0) * it.value / lengthOfMonth
         }.sum()
     }
 }
