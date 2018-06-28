@@ -13,8 +13,8 @@ class BudgetQuery(val budgetRepo: BudgetRepository) {
         val allBudgets = budgetRepo.findAll().map { YearMonth.of(it.year, it.month) to it.amount }.toMap()
         val numOfDays = ChronoUnit.DAYS.between(from, to)
 
-        return listOf(0..numOfDays).flatMap { it }.map { i ->
-            YearMonth.from(from.plusDays(i))
+        return listOf(0..numOfDays).flatMap { it }.map {
+            YearMonth.from(from.plusDays(it))
         }.groupingBy { it }.eachCount().map {
             (allBudgets[it.key]?:0) * it.value / it.key.lengthOfMonth()
         }.sum()
